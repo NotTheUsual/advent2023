@@ -3,15 +3,20 @@
   "module": "index.ts",
   "type": "module",
   "scripts": {
-    "test": "bun test --watch"
+    "test": "bun test --watch",
+    "new-day": "bun ./scripts/newDay.ts"
   },
   "devDependencies": {
+    "@types/minimist": "^1.2.5",
+    "@types/shelljs": "^0.8.15",
     "bun-types": "latest"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "dedent": "^1.5.1"
+    "dedent": "^1.5.1",
+    "minimist": "^1.2.8",
+    "shelljs": "^0.8.5"
   }
 }
