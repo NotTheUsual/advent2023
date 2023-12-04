@@ -15,7 +15,7 @@ const grabNumbers = (line: string): ParsedLine | null => {
   };
 };
 
-const calculateScore = (scores: ParsedLine): number => {
+const countWinsIn = (scores: ParsedLine): number => {
   let winCount = 0;
   
   for (const score of scores.yours) {
@@ -24,6 +24,11 @@ const calculateScore = (scores: ParsedLine): number => {
     }
   }
 
+  return winCount;
+};
+
+const calculateScore = (scores: ParsedLine): number => {
+  const winCount = countWinsIn(scores);
   if (!winCount) return 0;
   return Math.pow(2, winCount - 1);
 }
@@ -34,4 +39,25 @@ export function solvePart1 (input: string): number {
     .filter(isPresent)
     .map(calculateScore)
     .reduce(sum);
+}
+
+
+
+export function solvePart2 (input: string): number {
+  const cards = input.split('\n').map(grabNumbers).filter(isPresent).map(card => [card]);
+
+  for (let index = 0; index < cards.length; index += 1) {
+    const card = cards[index][0];
+    const wins = countWinsIn(card);
+
+    if (!wins) continue;
+    
+    for (const _ of cards[index]) {
+      for (let win = 1; win <= wins; win += 1) {
+        cards[index + win].push(cards[index + 1][0]);
+      }
+    }
+  }
+
+  return cards.map(duplicates => duplicates.length).reduce(sum);
 }
