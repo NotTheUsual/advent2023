@@ -39,3 +39,32 @@ export function solvePart1 (input: string): number {
   const values = parseInput(input);
   return values.map(guessNextValue).reduce(sum);
 }
+
+const guessPreviousValue = (sequence: Array<number>): number => {
+  let hasFoundLimit = false;
+  let differences: Array<Array<number>> = [];
+  let sequenceToDiff = sequence;
+
+  while (!hasFoundLimit) {
+    const nextDifferences = sequenceToDiff.map((number, index) => {
+      if (index === 0) return undefined;
+      return number - sequenceToDiff[index - 1];
+    }).filter(isNumber);
+    differences.unshift(nextDifferences);
+    sequenceToDiff = nextDifferences;
+    if (nextDifferences.every(difference => difference === 0)) hasFoundLimit = true;
+  }
+
+  const leadingDifference = differences.reduce((previous, differenceRow, index) => {
+    if (index === 0) return previous;
+    const nextDifference = differenceRow[0] - previous;
+    return nextDifference;
+  }, 0);
+
+  return sequence[0] - leadingDifference;
+};
+
+export function solvePart2 (input: string): number {
+  const values = parseInput(input);
+  return values.map(guessPreviousValue).reduce(sum);
+}
